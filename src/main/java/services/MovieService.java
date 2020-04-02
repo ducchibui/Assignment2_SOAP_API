@@ -8,9 +8,7 @@ package services;
 import com.mycompany.entities.Movie;
 import com.mycompany.repository.MovieJpaController;
 import com.mycompany.repository.exceptions.NonexistentEntityException;
-import java.io.File;
 import java.io.InputStream;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import javax.activation.DataHandler;
@@ -20,9 +18,7 @@ import javax.jws.WebService;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.xml.bind.annotation.XmlMimeType;
-import javax.xml.ws.WebServiceException;
 import javax.xml.ws.soap.MTOM;
-import org.jvnet.staxex.StreamingDataHandler;
 
 /**
  *
@@ -38,7 +34,6 @@ public class MovieService {
      */
     @WebMethod
    @XmlMimeType("application/octet-stream")
-//    public int uploadMovie(String fileName, byte[] data, String description) throws Exception {
     public void uploadMovie(String fileName,  @XmlMimeType("application/octet-stream") DataHandler data, String description) throws Exception {
 
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("TestMovie");
@@ -48,16 +43,7 @@ public class MovieService {
         movie.setName(fileName);
         final InputStream in = data.getInputStream();
         byte[] byteArray = org.apache.commons.io.IOUtils.toByteArray(in);
-//        try {
-//            StreamingDataHandler dh = (StreamingDataHandler) data;
-//            File file = File.createTempFile(fileName, "");
-//            dh.moveTo(file);
-//            movie.setData(Files.readAllBytes(file.toPath()));
-//            dh.close();
-//            
-//        } catch (Exception e) {
-//            throw new WebServiceException(e);
-//        }
+
         if (byteArray != null) {
             movie.setData(byteArray);
         }
@@ -66,7 +52,6 @@ public class MovieService {
 
         //Save movie into the database
         movieRepo.create(movie);
-//        return data.length;
     }
 
     public byte[] downloadMovie(String fileName) {

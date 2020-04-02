@@ -28,6 +28,7 @@ public class UploadMovieHandler implements SOAPHandler<SOAPMessageContext> {
         SOAPMessage message = context.getMessage();
         try {
 
+            //forbid to upload any movie contain name disney
             Boolean outbound = (Boolean) context.get(MessageContext.MESSAGE_OUTBOUND_PROPERTY);
             if (!outbound) {
                 Node elementInbound = (Node) message.getSOAPBody().getFirstChild();
@@ -38,8 +39,7 @@ public class UploadMovieHandler implements SOAPHandler<SOAPMessageContext> {
                     if (childText.contains("disney")) {
                         return false;
                     }
-                    System.out.println(childText);
-//                    childElementInbound.setTextContent("Humber");
+//                    System.out.println(childText);
                 }
             }
         } catch (SOAPException ex) {
@@ -47,13 +47,6 @@ public class UploadMovieHandler implements SOAPHandler<SOAPMessageContext> {
         } catch (Exception ex) {
             Logger.getLogger(UploadMovieHandler.class.getName()).log(Level.SEVERE, null, ex);
         }
-//        try {
-//            message.writeTo(System.out);
-//        } catch (SOAPException ex) {
-//            Logger.getLogger(UploadMovieHandler.class.getName()).log(Level.SEVERE, null, ex);
-//        } catch (IOException ex) {
-//            Logger.getLogger(UploadMovieHandler.class.getName()).log(Level.SEVERE, null, ex);
-//        }
         return true;
     }
 
